@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      phive_keys:
+        description: 'GPG key signatures for phive packages. Should be comma separated string "800d,d44d"'
+        required: false
+        default: 'CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5'
+        type: string
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+jobs:
+  testsuite-linux:
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.0', '8.1', '8.2']
+        dependencies: ['highest']
+        include:
+          - php-version: '7.4'
+            dependencies: 'lowest'
+          - php-version: '8.2'
+            dependencies: 'highest'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl
+          ini-values: zend.assertions=1
+          coverage: pcov
+          tools: cs2pr
+
+      - name: Composer install
+        uses: ramsey/composer-install@v2
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+          composer-options: ${{ matrix.composer-options }}
+
+      - name: Run PHPUnit
+        run: |
+          if [[ ${{ matrix.php-version }} == '8.2' ]]; then
+            vendor/bin/phpunit --coverage-clover=coverage.xml
+          else
+            vendor/bin/phpunit
+          fi
+
+      - name: Code Coverage Report
+        if: success() && matrix.php-version == '8.2'
+        uses: codecov/codecov-action@v3
+
+  cs-stan:
+    name: Coding Standard & Static Analysis
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, intl
+          coverage: none
+          tools: phive, cs2pr
+
+      - name: Composer Install
+        uses: ramsey/composer-install@v2
+
+      - name: Install PHP tools with phive.
+        run: "phive install --trust-gpg-keys '${{ inputs.phive_keys }}'"
+
+      - name: Run phpcs
+        run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
+
+      - name: Run psalm
+        run: tools/psalm --output-format=github
+
+      - name: Run phpstan
+        if: always()
+        run: tools/phpstan analyse --error-format=github

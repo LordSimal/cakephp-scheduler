@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<psalm
+  errorLevel="4"
+  findUnusedPsalmSuppress="true"
+  findUnusedBaselineEntry="true"
+  findUnusedCode="false"
+  resolveFromConfigFile="true"
+  reportMixedIssues="false"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://getpsalm.org/schema/config"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+  autoloader="tests/bootstrap.php"
+  usePhpDocMethodsWithoutMagicCall="true"
+>
+  <projectFiles>
+    <directory name="src" />
+    <ignoreFiles>
+      <directory name="vendor" />
+    </ignoreFiles>
+  </projectFiles>
+</psalm>

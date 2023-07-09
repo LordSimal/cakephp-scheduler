@@ -55,7 +55,7 @@ trait FrequenciesTrait
      * @param mixed $offset The amount of minutes which should pass per hour till the command is executed
      * @return \CakeScheduler\Scheduler\Event
      */
-    public function hourlyAt($offset): self
+    public function hourlyAt(mixed $offset): self
     {
         $offset = is_array($offset) ? implode(',', $offset) : $offset;
 
@@ -111,7 +111,7 @@ trait FrequenciesTrait
      * @param mixed $minuteOffset The amount of minutes
      * @return \CakeScheduler\Scheduler\Event
      */
-    public function twiceDailyAt(int $first = 1, int $second = 13, $minuteOffset = 0): self
+    public function twiceDailyAt(int $first = 1, int $second = 13, mixed $minuteOffset = 0): self
     {
         $hours = $first . ',' . $second;
 
@@ -311,10 +311,10 @@ trait FrequenciesTrait
     }
 
     /**
-     * @param int|string|array $days The day number or days string combination or an array of day numbers
+     * @param array|string|int $days The day number or days string combination or an array of day numbers
      * @return \CakeScheduler\Scheduler\Event
      */
-    public function days($days): self
+    public function days(int|string|array $days): self
     {
         $days = is_array($days) ? $days : func_get_args();
 
@@ -326,7 +326,7 @@ trait FrequenciesTrait
      * @param mixed $value The value at that position in the cron entry
      * @return \CakeScheduler\Scheduler\Event
      */
-    protected function spliceIntoPosition(int $position, $value): self
+    protected function spliceIntoPosition(int $position, mixed $value): self
     {
         $segments = preg_split("/\s+/", $this->expression);
 

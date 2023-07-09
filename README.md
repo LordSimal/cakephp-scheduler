@@ -9,8 +9,8 @@ This tool allows you to move all your cron jobs from being server configured via
 to being app controlled in your CakePHP application (and plugins).
 
 ## Requirements
-- PHP 7.4+ / PHP 8.0+
-- CakePHP 4.4+
+- PHP 8.1+
+- CakePHP 5.0+
 
 ## Installation
 ```

@@ -5,18 +5,15 @@
          stopOnFailure="false"
          bootstrap="./tests/bootstrap.php"
          backupGlobals="true"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-
-  <coverage>
-    <include>
-      <directory suffix=".php">./src/</directory>
-    </include>
-  </coverage>
-
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.2/phpunit.xsd">
   <testsuites>
     <testsuite name="cakescheduler">
       <directory>./tests/TestCase/</directory>
     </testsuite>
   </testsuites>
-
+  <source>
+    <include>
+      <directory suffix=".php">./src/</directory>
+    </include>
+  </source>
 </phpunit>

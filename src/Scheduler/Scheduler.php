@@ -14,8 +14,14 @@ use InvalidArgumentException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @implements \Cake\Event\EventDispatcherInterface<\CakeScheduler\Scheduler\Scheduler>
+ */
 class Scheduler implements EventDispatcherInterface
 {
+    /**
+     * @use \Cake\Event\EventDispatcherTrait<\CakeScheduler\Scheduler\Scheduler>
+     */
     use EventDispatcherTrait;
 
     protected ?ContainerInterface $container = null;

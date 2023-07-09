@@ -7,6 +7,7 @@ use Cake\Chronos\Chronos;
 use Cake\Console\Command\HelpCommand;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Event;
+use InvalidArgumentException;
 
 class EventTest extends TestCase
 {
@@ -34,7 +35,7 @@ class EventTest extends TestCase
     public function testEveryXMinutes()
     {
         $this->assertSame('*/2 * * * *', $this->event->everyXMinutes(2)->getExpression());
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->assertSame('*/2 * * * *', $this->event->everyXMinutes(-10)->getExpression());
     }
 
@@ -75,7 +76,7 @@ class EventTest extends TestCase
     {
         $this->assertSame('0 1-23/2 * * *', $this->event->everyOddHour()->getExpression());
         $this->assertSame('0 */2 * * *', $this->event->everyXHours(2)->getExpression());
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->assertSame('*/2 * * * *', $this->event->everyXHours(-10)->getExpression());
     }
 

@@ -18,7 +18,6 @@ class ScheduleViewCommand extends Command
      */
     public function __construct(Scheduler $scheduler)
     {
-        parent::__construct();
         $this->scheduler = $scheduler;
     }
 

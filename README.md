@@ -1,8 +1,7 @@
 # CakePHP Scheduler Plugin
 
-TODO - insert badges
-
-CakePHP Scheduler Plugin
+[![Latest Stable Version](http://poser.pugx.org/lordsimal/cakephp-scheduler/v)](https://packagist.org/packages/lordsimal/cakephp-scheduler) [![Total Downloads](http://poser.pugx.org/lordsimal/cakephp-scheduler/downloads)](https://packagist.org/packages/lordsimal/cakephp-scheduler) [![Latest Unstable Version](http://poser.pugx.org/lordsimal/cakephp-scheduler/v/unstable)](https://packagist.org/packages/lordsimal/cakephp-scheduler) [![License](http://poser.pugx.org/lordsimal/cakephp-scheduler/license)](https://packagist.org/packages/lordsimal/cakephp-scheduler) [![PHP Version Require](http://poser.pugx.org/lordsimal/cakephp-scheduler/require/php)](https://packagist.org/packages/lordsimal/cakephp-scheduler)
+[![codecov](https://codecov.io/github/LordSimal/cakephp-scheduler/branch/main/graph/badge.svg?token=XFRMhXp6S9)](https://codecov.io/github/LordSimal/cakephp-scheduler)
 
 ## What can this plugin do?
 

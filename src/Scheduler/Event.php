@@ -53,7 +53,7 @@ class Event
      */
     public function run(ConsoleIo $io): ?int
     {
-        $io->info(sprintf('Executing [%s]', $this->command::class));
+        $io->info(sprintf('Executing [%s]', get_class($this->command)));
 
         return $this->command->run($this->args, $io);
     }

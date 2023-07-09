@@ -8,13 +8,6 @@ on:
     branches:
       - '*'
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      phive_keys:
-        description: 'GPG key signatures for phive packages. Should be comma separated string "800d,d44d"'
-        required: false
-        default: 'CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5'
-        type: string
 
 permissions:
   contents: read # to fetch code (actions/checkout)
@@ -82,7 +75,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Install PHP tools with phive.
-        run: "phive install --trust-gpg-keys '${{ inputs.phive_keys }}'"
+        run: "phive install --trust-gpg-keys CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5"
 
       - name: Run phpcs
         run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr

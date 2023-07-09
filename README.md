@@ -112,6 +112,8 @@ bin/cake schedule:view
 
 ### Running the Scheduler
 
+You still need the following entry in your `crontab`
+
 ```
 * * * * * cd /path-to-your-project && bin/cake schedule:run >> /dev/null 2>&1
 ```

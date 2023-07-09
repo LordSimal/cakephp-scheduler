@@ -37,7 +37,7 @@
         "stan-baseline": "tools/phpstan --generate-baseline",
         "stan-setup": "phive install",
         "test": "phpunit",
-        "test-coverage": "phpunit --coverage-clover=clover.xml"
+        "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-html coverage"
     },
     "config": {
         "sort-packages": true,

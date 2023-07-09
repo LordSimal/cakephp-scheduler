@@ -6,7 +6,9 @@ namespace CakeScheduler\Test\TestCase\Command;
 use Cake\Collection\Collection;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\TestSuite\TestCase;
+use CakeScheduler\Scheduler\Event;
 use CakeScheduler\Scheduler\Scheduler;
+use TestApp\Command\TestAppCommand;
 
 class ScheduleViewCommandTest extends TestCase
 {
@@ -31,6 +33,26 @@ class ScheduleViewCommandTest extends TestCase
         $this->assertExitSuccess();
         $this->assertOutputContains('0 0 * * 0 | TestApp\Command\TestAppCommand');
         $this->assertOutputContains('0 0 * * * | TestPlugin\Command\TestPluginCommand');
+    }
+
+    public function testRunScheduleViewWithEventsHavingArgsAndOptions(): void
+    {
+        $this->mockService(Scheduler::class, function () {
+            $schedulerMock = $this->getMockBuilder(Scheduler::class)->getMock();
+
+            $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
+            $collection = new Collection([$event]);
+
+            $schedulerMock->expects($this->any())
+                ->method('allEvents')
+                ->willReturn($collection);
+
+            return $schedulerMock;
+        });
+        $this->exec('schedule:view');
+
+        $this->assertExitSuccess();
+        $this->assertOutputContains('* * * * * | TestApp\Command\TestAppCommand [somearg --myoption=someoption]');
     }
 
     public function testRunScheduleViewNoEvents(): void

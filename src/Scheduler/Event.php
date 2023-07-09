@@ -73,4 +73,12 @@ class Event
     {
         return $this->command;
     }
+
+    /**
+     * @return array
+     */
+    public function getArgs(): array
+    {
+        return $this->args;
+    }
 }

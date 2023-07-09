@@ -38,7 +38,13 @@ class ScheduleViewCommand extends Command
         }
 
         $events->each(function (Event $event) use ($io): void {
-            $msg = sprintf('%s | %s', $event->getExpression(), get_class($event->getCommand()));
+            $expression = $event->getExpression();
+            $fqcn = get_class($event->getCommand());
+            $args = $event->getArgs();
+            if ($args) {
+                $fqcn .= ' [' . implode(' ', $args) . ']';
+            }
+            $msg = sprintf('%s | %s', $expression, $fqcn);
             $io->info($msg);
         });
 

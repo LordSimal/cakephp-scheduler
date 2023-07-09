@@ -71,9 +71,9 @@ class ScheduleRunCommandTest extends TestCase
         $this->mockService(Scheduler::class, function () {
             $schedulerMock = $this->getMockBuilder(Scheduler::class)->getMock();
 
-            $versionEvent = new Event(new TestAppCommand(), []);
-            $routesEvent = new Event(new TestPluginCommand(), []);
-            $collection = new Collection([$versionEvent, $routesEvent]);
+            $appEvent = new Event(new TestAppCommand(), []);
+            $pluginEvent = new Event(new TestPluginCommand(), []);
+            $collection = new Collection([$appEvent, $pluginEvent]);
 
             $schedulerMock->expects($this->any())
                 ->method('dueEvents')
@@ -88,5 +88,28 @@ class ScheduleRunCommandTest extends TestCase
         $this->assertOutputContains('Test App Command executed');
         $this->assertOutputContains('Executing [TestPlugin\\Command\\TestPluginCommand]');
         $this->assertOutputContains('Test Plugin Command executed');
+    }
+
+    public function testRunSingleCommandWithArgsAndOptions(): void
+    {
+        $this->mockService(Scheduler::class, function () {
+            $schedulerMock = $this->getMockBuilder(Scheduler::class)->getMock();
+
+            $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
+            $collection = new Collection([$event]);
+
+            $schedulerMock->expects($this->any())
+                ->method('dueEvents')
+                ->willReturn($collection);
+
+            return $schedulerMock;
+        });
+        $this->exec('schedule:run');
+
+        $this->assertExitSuccess();
+        $this->assertOutputContains('Executing [TestApp\\Command\\TestAppCommand]');
+        $this->assertOutputContains('Test App Command executed');
+        $this->assertOutputContains('with arg somearg');
+        $this->assertOutputContains('with option someoption');
     }
 }

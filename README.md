@@ -47,6 +47,7 @@ which will add the `schedule(Scheduler &$scheduler)` method.
 namespace App;
 
 use App\Command\MyAppCommand;
+use App\Command\OtherAppCommand;
 use Cake\Http\BaseApplication;
 use CakeScheduler\CakeSchedulerInterface;
 use CakeScheduler\Scheduler\Scheduler;
@@ -56,6 +57,7 @@ class Application extends BaseApplication implements CakeSchedulerInterface
     public function schedule(Scheduler &$scheduler): void
     {
         $scheduler->execute(MyAppCommand::class)->daily();
+        $scheduler->execute(OtherAppCommand::class, ['somearg', '--myoption=someoption'])->daily();
     }
 }
 ```

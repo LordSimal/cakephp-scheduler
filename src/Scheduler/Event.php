@@ -13,10 +13,6 @@ class Event
 {
     use FrequenciesTrait;
 
-    protected CommandInterface $command;
-
-    protected array $args;
-
     protected ConsoleIo $io;
 
     public const SUNDAY = 0;
@@ -31,10 +27,8 @@ class Event
      * @param \Cake\Console\CommandInterface $command The command object related to this event
      * @param array $args Args which should be passed to the command
      */
-    public function __construct(CommandInterface $command, array $args = [])
+    public function __construct(protected CommandInterface $command, protected array $args = [])
     {
-        $this->command = $command;
-        $this->args = $args;
     }
 
     /**

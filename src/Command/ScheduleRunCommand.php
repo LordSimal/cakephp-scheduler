@@ -11,14 +11,11 @@ use CakeScheduler\Scheduler\Scheduler;
 
 class ScheduleRunCommand extends Command
 {
-    protected Scheduler $scheduler;
-
     /**
      * @param \CakeScheduler\Scheduler\Scheduler $scheduler DI injected
      */
-    public function __construct(Scheduler $scheduler)
+    public function __construct(protected Scheduler $scheduler)
     {
-        $this->scheduler = $scheduler;
     }
 
     /**

@@ -40,7 +40,7 @@ jobs:
           tools: cs2pr
 
       - name: Composer install
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
         with:
           dependency-versions: ${{ matrix.dependencies }}
           composer-options: ${{ matrix.composer-options }}
@@ -73,7 +73,7 @@ jobs:
           tools: phive, cs2pr
 
       - name: Composer Install
-        uses: ramsey/composer-install@v2
+        uses: ramsey/composer-install@v3
 
       - name: Install PHP tools with phive.
         run: "phive install --trust-gpg-keys CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5"

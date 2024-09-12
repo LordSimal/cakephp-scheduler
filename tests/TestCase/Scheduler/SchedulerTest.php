@@ -6,6 +6,7 @@ namespace CakeScheduler\Test\TestCase\Scheduler;
 use Cake\Chronos\Chronos;
 use Cake\Command\VersionCommand;
 use Cake\Console\Command\HelpCommand;
+use Cake\Console\ConsoleIo;
 use Cake\Core\Container;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Scheduler;
@@ -44,6 +45,17 @@ class SchedulerTest extends TestCase
         $events = $this->scheduler->dueEvents();
         $this->assertEquals(2, $events->count());
         Chronos::setTestNow('now');
+    }
+
+    public function testAddCallable(): void
+    {
+        $this->scheduler->execute(function ($a, $b, $c, ConsoleIo $io) {
+            $io->info('Sum');
+
+            return $a + $b + $c;
+        }, [1,2,3]);
+        $events = $this->scheduler->dueEvents();
+        $this->assertNotEmpty($events);
     }
 
     public function testAddUnknownCommand(): void

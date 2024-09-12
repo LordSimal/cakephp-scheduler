@@ -231,4 +231,24 @@ class ScheduleRunCommandTest extends TestCase
         $this->assertOutputNotContains('Executing [TestPlugin\\Command\\TestPluginCommand]');
         $this->assertOutputNotContains('Test Plugin Command executed');
     }
+
+    public function testRunSingleCallable(): void
+    {
+        $this->mockService(Scheduler::class, function () {
+            $scheduler = new Scheduler(new Container());
+            $scheduler->execute(function ($a, $b, $c, ConsoleIo $io) {
+                $io->info('Sum');
+
+                return $a + $b + $c;
+            }, [1,2,3]);
+
+            return $scheduler;
+        });
+
+        $this->exec('schedule:run');
+
+        $this->assertExitSuccess();
+        $this->assertOutputContains('Executing [Cake\\Command\\Command@anonymous');
+        $this->assertOutputContains('<info>Sum</info>');
+    }
 }

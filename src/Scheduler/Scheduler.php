@@ -5,7 +5,10 @@ namespace CakeScheduler\Scheduler;
 
 use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
+use Cake\Command\Command;
+use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
+use Cake\Console\ConsoleIo;
 use Cake\Core\Container;
 use Cake\Core\ContainerInterface;
 use Cake\Event\EventDispatcherInterface;
@@ -48,12 +51,16 @@ class Scheduler implements EventDispatcherInterface
     }
 
     /**
-     * @param string $command The FQCN of the command to be executed
+     * @param callable|string $command The FQCN of the command to be executed or a callable function
      * @param array $args Args which should be passed on to the command
      * @return \CakeScheduler\Scheduler\Event
      */
-    public function execute(string $command, array $args = []): Event
+    public function execute(string|callable $command, array $args = []): Event
     {
+        if (is_callable($command)) {
+            return $this->addCallable($command, $args);
+        }
+
         try {
             $commandObj = $this->container->get($command);
         } catch (ContainerExceptionInterface | NotFoundExceptionInterface $ex) {
@@ -76,6 +83,42 @@ class Scheduler implements EventDispatcherInterface
      */
     protected function addCommand(CommandInterface $command, array $args = []): Event
     {
+        $event = new Event($command, $args);
+        $this->events = $this->events->appendItem($event);
+
+        return $event;
+    }
+
+    /**
+     * @param callable $callable
+     * @param array $args
+     * @return \CakeScheduler\Scheduler\Event
+     */
+    protected function addCallable(callable $callable, array $args = []): Event
+    {
+        $command = new class ($callable, $args) extends Command {
+            /**
+             * @param callable $callable
+             * @param array $args
+             */
+            public function __construct(
+                protected $callable,
+                protected array $args = []
+            ) {
+            }
+
+            /**
+             * @param \Cake\Console\Arguments $args
+             * @param \Cake\Console\ConsoleIo $io
+             * @return int|null
+             */
+            public function execute(Arguments $args, ConsoleIo $io): ?int
+            {
+                array_push($this->args, $io);
+
+                return call_user_func_array($this->callable, $this->args);
+            }
+        };
         $event = new Event($command, $args);
         $this->events = $this->events->appendItem($event);
 

@@ -34,6 +34,11 @@ class Scheduler implements EventDispatcherInterface
     protected CollectionInterface $events;
 
     /**
+     * The event code if execution should be stopped
+     */
+    public const SHOULD_STOP_EXECUTION = 1;
+
+    /**
      * @param \Cake\Core\Container|null $container The DI container instance from the app
      */
     public function __construct(?Container $container = null)

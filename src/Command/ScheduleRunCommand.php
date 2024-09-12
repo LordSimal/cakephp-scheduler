@@ -6,8 +6,10 @@ namespace CakeScheduler\Command;
 use Cake\Command\Command;
 use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
+use CakeScheduler\Error\SchedulerStoppedException;
 use CakeScheduler\Scheduler\Event;
 use CakeScheduler\Scheduler\Scheduler;
+use Throwable;
 
 class ScheduleRunCommand extends Command
 {
@@ -34,7 +36,13 @@ class ScheduleRunCommand extends Command
         }
 
         $events->each(function (Event $event) use ($io): void {
-            $this->runEvent($event, $io);
+            $returnCode = $this->runEvent($event, $io);
+
+            if ($returnCode === Scheduler::SHOULD_STOP_EXECUTION) {
+                $io->error('Error while executing command: ' . get_class($event->getCommand()));
+
+                throw new SchedulerStoppedException('Scheduler was stopped by event listener');
+            }
         });
 
         return self::CODE_SUCCESS;
@@ -48,8 +56,17 @@ class ScheduleRunCommand extends Command
     protected function runEvent(Event $event, ConsoleIo $io): ?int
     {
         $this->scheduler->dispatchEvent('CakeScheduler.beforeExecute', ['event' => $event]);
-        $result = $event->run($io);
-        $this->scheduler->dispatchEvent('CakeScheduler.afterExecute', ['event' => $event, 'result' => $result]);
+        try {
+            $result = $event->run($io);
+            $this->scheduler->dispatchEvent('CakeScheduler.afterExecute', ['event' => $event, 'result' => $result]);
+        } catch (Throwable $exception) {
+            $io->error($exception->getMessage());
+            $event = $this->scheduler->dispatchEvent('CakeScheduler.errorExecute', [
+                'event' => $event,
+                'exception' => $exception,
+            ]);
+            $result = $event->getResult();
+        }
 
         return $result;
     }

@@ -4,7 +4,7 @@
     "type": "cakephp-plugin",
     "require": {
         "php": "^8.1",
-        "cakephp/cakephp": "dev-5.next",
+        "cakephp/cakephp": "^5.0",
         "dragonmantank/cron-expression": "^3.3"
     },
     "require-dev": {

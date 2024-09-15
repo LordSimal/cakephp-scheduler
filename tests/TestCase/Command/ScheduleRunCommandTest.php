@@ -9,7 +9,6 @@ use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
 use Cake\Core\Container;
 use Cake\Event\EventInterface;
-use Cake\TestSuite\LogTestTrait;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Error\SchedulerStoppedException;
 use CakeScheduler\Scheduler\Event;
@@ -23,7 +22,6 @@ use TestPlugin\Command\TestPluginCommand;
 class ScheduleRunCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
-    use LogTestTrait;
 
     protected Scheduler|LegacyMockInterface $scheduler;
 

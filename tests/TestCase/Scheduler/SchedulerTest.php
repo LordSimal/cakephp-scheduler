@@ -34,7 +34,7 @@ class SchedulerTest extends TestCase
     {
         $this->scheduler->execute(VersionCommand::class);
         $events = $this->scheduler->dueEvents();
-        $this->assertNotEmpty($events);
+        $this->assertFalse($events->isEmpty());
     }
 
     public function testAddMultipleDueEvents(): void

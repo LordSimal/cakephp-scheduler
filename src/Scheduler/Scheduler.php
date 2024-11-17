@@ -62,7 +62,11 @@ class Scheduler implements EventDispatcherInterface
         }
 
         try {
-            $commandObj = $this->container->get($command);
+            if ($this->container !== null) {
+                $commandObj = $this->container->get($command);
+            } elseif (class_exists($command)) {
+                $commandObj = new $command();
+            }
         } catch (ContainerExceptionInterface | NotFoundExceptionInterface $ex) {
             if (class_exists($command)) {
                 $commandObj = new $command();

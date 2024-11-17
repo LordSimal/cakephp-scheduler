@@ -328,7 +328,7 @@ trait FrequenciesTrait
      */
     protected function spliceIntoPosition(int $position, mixed $value): self
     {
-        $segments = preg_split("/\s+/", $this->expression);
+        $segments = preg_split("/\s+/", $this->expression) ?: [];
 
         $segments[$position - 1] = $value;
 

@@ -55,7 +55,7 @@ class SchedulerTest extends TestCase
             return $a + $b + $c;
         }, [1,2,3]);
         $events = $this->scheduler->dueEvents();
-        $this->assertNotEmpty($events);
+        $this->assertFalse($events->isEmpty());
     }
 
     public function testAddUnknownCommand(): void

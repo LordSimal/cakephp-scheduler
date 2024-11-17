@@ -50,7 +50,11 @@ class Scheduler implements EventDispatcherInterface
     public function execute(string $command, array $args = []): Event
     {
         try {
-            $commandObj = $this->container->get($command);
+            if ($this->container !== null) {
+                $commandObj = $this->container->get($command);
+            } elseif (class_exists($command)) {
+                $commandObj = new $command();
+            }
         } catch (ContainerExceptionInterface | NotFoundExceptionInterface $ex) {
             if (class_exists($command)) {
                 $commandObj = new $command();

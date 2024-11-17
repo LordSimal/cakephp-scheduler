@@ -1,0 +1,19 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method CakeScheduler\\Scheduler\\Scheduler\|Mockery\\LegacyMockInterface\:\:getEventManager\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/TestCase/Command/ScheduleRunCommandTest.php
+
+		-
+			message: '#^Call to an undefined method CakeScheduler\\Scheduler\\Scheduler\|Mockery\\LegacyMockInterface\:\:shouldReceive\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: tests/TestCase/Command/ScheduleRunCommandTest.php
+
+		-
+			message: '#^Call to an undefined method Mockery\\ExpectationInterface\|Mockery\\HigherOrderMessage\:\:andReturn\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: tests/TestCase/Command/ScheduleRunCommandTest.php

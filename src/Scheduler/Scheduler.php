@@ -107,7 +107,7 @@ class Scheduler implements EventDispatcherInterface
              */
             public function __construct(
                 protected $callable,
-                protected array $args = []
+                protected array $args = [],
             ) {
             }
 

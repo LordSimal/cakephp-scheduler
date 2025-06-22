@@ -32,7 +32,7 @@ class ScheduleRunCommandTest extends TestCase
         $this->setAppNamespace();
         $this->configApplication(
             'TestApp\Application',
-            [PLUGIN_TESTS . 'test_app' . DS . 'config']
+            [PLUGIN_TESTS . 'test_app' . DS . 'config'],
         );
 
         $this->scheduler = Mockery::mock(Scheduler::class, [new Container()])->makePartial();

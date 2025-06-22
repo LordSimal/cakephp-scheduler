@@ -11,6 +11,7 @@
   xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
   autoloader="tests/bootstrap.php"
   usePhpDocMethodsWithoutMagicCall="true"
+  ensureOverrideAttribute="false"
 >
   <projectFiles>
     <directory name="src" />

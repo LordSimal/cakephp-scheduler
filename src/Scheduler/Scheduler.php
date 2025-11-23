@@ -32,7 +32,7 @@ class Scheduler implements EventDispatcherInterface
     /**
      * All the events on the schedule.
      *
-     * @var \Cake\Collection\CollectionInterface
+     * @var \Cake\Collection\CollectionInterface<\CakeScheduler\Scheduler\Event>
      */
     protected CollectionInterface $events;
 

@@ -12,6 +12,7 @@
   autoloader="tests/bootstrap.php"
   usePhpDocMethodsWithoutMagicCall="true"
   ensureOverrideAttribute="false"
+    errorBaseline="psalm-baseline.xml"
 >
   <projectFiles>
     <directory name="src" />

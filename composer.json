@@ -2,6 +2,12 @@
     "name": "lordsimal/cakephp-scheduler",
     "description": "Scheduler plugin for CakePHP",
     "type": "cakephp-plugin",
+    "keywords": [
+        "cakephp",
+        "plugin",
+        "scheduler",
+        "cron"
+    ],
     "require": {
         "php": "^8.1",
         "cakephp/cakephp": "^5.0",

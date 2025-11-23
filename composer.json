@@ -36,6 +36,7 @@
         "cs-fix": "phpcbf --colors -p ./src ./tests ./config",
         "phpstan": "tools/phpstan analyse",
         "psalm": "tools/psalm --show-info=false",
+        "psalm-baseline": "tools/psalm --set-baseline=psalm-baseline.xml",
         "stan": [
             "@phpstan",
             "@psalm"

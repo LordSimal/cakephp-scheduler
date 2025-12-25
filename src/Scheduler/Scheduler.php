@@ -32,7 +32,7 @@ class Scheduler implements EventDispatcherInterface
     /**
      * All the events on the schedule.
      *
-     * @var \Cake\Collection\CollectionInterface<\CakeScheduler\Scheduler\Event>
+     * @var \Cake\Collection\CollectionInterface<array-key, \CakeScheduler\Scheduler\Event>
      */
     protected CollectionInterface $events;
 
@@ -130,7 +130,7 @@ class Scheduler implements EventDispatcherInterface
     }
 
     /**
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<array-key, \CakeScheduler\Scheduler\Event>
      */
     public function dueEvents(): CollectionInterface
     {
@@ -140,7 +140,7 @@ class Scheduler implements EventDispatcherInterface
     }
 
     /**
-     * @return \Cake\Collection\CollectionInterface
+     * @return \Cake\Collection\CollectionInterface<array-key, \CakeScheduler\Scheduler\Event>
      */
     public function allEvents(): CollectionInterface
     {

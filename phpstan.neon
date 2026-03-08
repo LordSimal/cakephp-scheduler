@@ -10,4 +10,6 @@ parameters:
       - tests/bootstrap.php
     ignoreErrors:
         -
-            identifier: missingType.iterableValue
+        	identifier: missingType.iterableValue
+        -
+            identifier: unset.possiblyHookedProperty

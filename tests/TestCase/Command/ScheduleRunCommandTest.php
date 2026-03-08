@@ -40,10 +40,10 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunNoCommand(): void
     {
-        $this->mockService(Scheduler::class, function () {
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn(new Collection([]));
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([]));
 
+        $this->mockService(Scheduler::class, function () {
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -54,12 +54,11 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunSingleCommand(): void
     {
-        $this->mockService(Scheduler::class, function () {
-            $event = new Event(new TestAppCommand(), []);
-            $collection = new Collection([$event]);
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
+        $event = new Event(new TestAppCommand(), []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$event]));
 
+        $this->mockService(Scheduler::class, function () {
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -71,14 +70,12 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunMultipleCommands(): void
     {
+        $appEvent = new Event(new TestAppCommand(), []);
+        $pluginEvent = new Event(new TestPluginCommand(), []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$appEvent, $pluginEvent]));
+
         $this->mockService(Scheduler::class, function () {
-            $appEvent = new Event(new TestAppCommand(), []);
-            $pluginEvent = new Event(new TestPluginCommand(), []);
-            $collection = new Collection([$appEvent, $pluginEvent]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -92,13 +89,11 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunSingleCommandWithArgsAndOptions(): void
     {
+        $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$event]));
+
         $this->mockService(Scheduler::class, function () {
-            $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
-            $collection = new Collection([$event]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -112,20 +107,17 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunSingleCommandWhichThrowsException(): void
     {
+        $command = new class () extends TestAppCommand {
+            public function execute(Arguments $args, ConsoleIo $io): void
+            {
+                throw new Exception('Test Exception');
+            }
+        };
+        $event = new Event($command, []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$event]));
+
         $this->mockService(Scheduler::class, function () {
-            $command = new class () extends TestAppCommand {
-                public function execute(Arguments $args, ConsoleIo $io): void
-                {
-                    throw new Exception('Test Exception');
-                }
-            };
-
-            $event = new Event($command, []);
-            $collection = new Collection([$event]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -137,24 +129,20 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunSingleCommandWhichThrowsExceptionAndListenerStopsExecution(): void
     {
+        $command = new class () extends TestAppCommand {
+            public function execute(Arguments $args, ConsoleIo $io): void
+            {
+                throw new Exception('Test Exception');
+            }
+        };
+        $event = new Event($command, []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$event]));
+        $this->scheduler->getEventManager()->on('CakeScheduler.errorExecute', function (EventInterface $event) {
+            $event->setResult(Scheduler::SHOULD_STOP_EXECUTION);
+        });
+
         $this->mockService(Scheduler::class, function () {
-            $command = new class () extends TestAppCommand {
-                public function execute(Arguments $args, ConsoleIo $io): void
-                {
-                    throw new Exception('Test Exception');
-                }
-            };
-
-            $event = new Event($command, []);
-            $collection = new Collection([$event]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
-            $this->scheduler->getEventManager()->on('CakeScheduler.errorExecute', function (EventInterface $event) {
-                $event->setResult(Scheduler::SHOULD_STOP_EXECUTION);
-            });
-
             return $this->scheduler;
         });
 
@@ -165,21 +153,19 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunMultipleCommandsAndLastOneFails(): void
     {
+        $appEvent = new Event(new TestAppCommand(), []);
+        $pluginEvent = new Event(new TestPluginCommand(), []);
+        $failCommand = new class () extends TestAppCommand {
+            public function execute(Arguments $args, ConsoleIo $io): void
+            {
+                throw new Exception('Test Exception');
+            }
+        };
+        $failEvent = new Event($failCommand, []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$appEvent, $pluginEvent, $failEvent]));
+
         $this->mockService(Scheduler::class, function () {
-            $appEvent = new Event(new TestAppCommand(), []);
-            $pluginEvent = new Event(new TestPluginCommand(), []);
-            $failCommand = new class () extends TestAppCommand {
-                public function execute(Arguments $args, ConsoleIo $io): void
-                {
-                    throw new Exception('Test Exception');
-                }
-            };
-            $failEvent = new Event($failCommand, []);
-            $collection = new Collection([$appEvent, $pluginEvent, $failEvent]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
             return $this->scheduler;
         });
         $this->exec('schedule:run');
@@ -195,25 +181,22 @@ class ScheduleRunCommandTest extends TestCase
 
     public function testRunMultipleCommandsAndSecondToLastOneFailsAndStopsExecution(): void
     {
+        $appEvent = new Event(new TestAppCommand(), []);
+        $pluginEvent = new Event(new TestPluginCommand(), []);
+        $failCommand = new class () extends TestAppCommand {
+            public function execute(Arguments $args, ConsoleIo $io): void
+            {
+                throw new Exception('Test Exception');
+            }
+        };
+        $failEvent = new Event($failCommand, []);
+        $this->scheduler->shouldReceive('dueEvents')
+            ->andReturn(new Collection([$appEvent, $failEvent, $pluginEvent]));
+        $this->scheduler->getEventManager()->on('CakeScheduler.errorExecute', function (EventInterface $event) {
+            $event->setResult(Scheduler::SHOULD_STOP_EXECUTION);
+        });
+
         $this->mockService(Scheduler::class, function () {
-            $appEvent = new Event(new TestAppCommand(), []);
-            $pluginEvent = new Event(new TestPluginCommand(), []);
-            $failCommand = new class () extends TestAppCommand {
-                public function execute(Arguments $args, ConsoleIo $io): void
-                {
-                    throw new Exception('Test Exception');
-                }
-            };
-            $failEvent = new Event($failCommand, []);
-            $collection = new Collection([$appEvent, $failEvent, $pluginEvent]);
-
-            $this->scheduler->shouldReceive('dueEvents')
-                ->andReturn($collection);
-
-            $this->scheduler->getEventManager()->on('CakeScheduler.errorExecute', function (EventInterface $event) {
-                $event->setResult(Scheduler::SHOULD_STOP_EXECUTION);
-            });
-
             return $this->scheduler;
         });
 

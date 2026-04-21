@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ '8.1', '8.2', '8.3', '8.4']
+        php-version: [ '8.1', '8.2', '8.3', '8.4', '8.5']
         dependencies: ['highest']
         include:
           - php-version: '8.1'
@@ -80,7 +80,7 @@ jobs:
         uses: ramsey/composer-install@v4
 
       - name: Install PHP tools with phive.
-        run: "phive install --trust-gpg-keys 'CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5'"
+        run: "phive install --trust-gpg-keys 'CF1A108D0E7AE720,51C67305FFC2E5C0,12CE0F1D262429A5,99BF4D9A33D65E1E'"
 
       - name: Run phpcs
         run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr

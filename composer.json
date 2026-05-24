@@ -16,7 +16,7 @@
     "require-dev": {
         "cakephp/cakephp-codesniffer": "^5.0",
         "mockery/mockery": "^1.6",
-        "phpunit/phpunit": "^10.5.5 || ^11.1.3"
+        "phpunit/phpunit": "^10.5.5 || ^11.5.3 || ^12.1.3 || ^13.0"
     },
     "license": "MIT",
     "autoload": {
@@ -34,16 +34,13 @@
     "scripts": {
         "cs-check": "phpcs --colors -p ./src ./tests ./config",
         "cs-fix": "phpcbf --colors -p ./src ./tests ./config",
-        "phpstan": "tools/phpstan analyse",
-        "psalm": "tools/psalm --show-info=false",
-        "psalm-baseline": "tools/psalm --set-baseline=psalm-baseline.xml",
+        "phpstan": "bin/docker-exec ghcr.io/phpstan/phpstan:2-php8.4 analyse",
         "stan": [
-            "@phpstan",
-            "@psalm"
+            "bin/docker-exec ghcr.io/phpstan/phpstan:2-php8.4 analyse",
+            "bin/docker-exec ghcr.io/danog/psalm:7.0.0-beta19 /composer/vendor/bin/psalm --no-cache"
         ],
-        "stan-tests": "tools/phpstan analyze -c tests/phpstan.neon",
-        "stan-baseline": "tools/phpstan --generate-baseline",
-        "stan-setup": "phive install",
+        "stan-baseline": "bin/docker-exec ghcr.io/phpstan/phpstan:2-php8.4 --generate-baseline",
+        "psalm-baseline": "bin/docker-exec ghcr.io/danog/psalm:7.0.0-beta19 /composer/vendor/bin/psalm --no-cache --set-baseline=psalm-baseline.xml",
         "test": "phpunit",
         "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-html coverage"
     },

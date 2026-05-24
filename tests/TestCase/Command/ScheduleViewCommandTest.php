@@ -5,14 +5,19 @@ namespace CakeScheduler\Test\TestCase\Command;
 
 use Cake\Collection\Collection;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
+use Cake\Core\Container;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Event;
 use CakeScheduler\Scheduler\Scheduler;
+use Mockery;
+use Mockery\MockInterface;
 use TestApp\Command\TestAppCommand;
 
 class ScheduleViewCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
+
+    protected Scheduler&MockInterface $scheduler;
 
     protected function setUp(): void
     {
@@ -23,6 +28,10 @@ class ScheduleViewCommandTest extends TestCase
             'TestApp\Application',
             [PLUGIN_TESTS . 'test_app' . DS . 'config'],
         );
+
+        /** @var \CakeScheduler\Scheduler\Scheduler&\Mockery\MockInterface $scheduler */
+        $scheduler = Mockery::mock(Scheduler::class, [new Container()])->makePartial();
+        $this->scheduler = $scheduler;
     }
 
     public function testRunScheduleView(): void
@@ -37,16 +46,14 @@ class ScheduleViewCommandTest extends TestCase
     public function testRunScheduleViewWithEventsHavingArgsAndOptions(): void
     {
         $this->mockService(Scheduler::class, function () {
-            $schedulerMock = $this->getMockBuilder(Scheduler::class)->getMock();
-
             $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
             $collection = new Collection([$event]);
 
-            $schedulerMock->expects($this->any())
-                ->method('allEvents')
-                ->willReturn($collection);
+            /** @var \Mockery\ExpectationInterface $expectation */
+            $expectation = $this->scheduler->shouldReceive('allEvents');
+            $expectation->andReturn($collection);
 
-            return $schedulerMock;
+            return $this->scheduler;
         });
         $this->exec('schedule:view');
 
@@ -57,15 +64,13 @@ class ScheduleViewCommandTest extends TestCase
     public function testRunScheduleViewNoEvents(): void
     {
         $this->mockService(Scheduler::class, function () {
-            $schedulerMock = $this->getMockBuilder(Scheduler::class)->getMock();
-
             $collection = new Collection([]);
 
-            $schedulerMock->expects($this->any())
-                ->method('allEvents')
-                ->willReturn($collection);
+            /** @var \Mockery\ExpectationInterface $expectation */
+            $expectation = $this->scheduler->shouldReceive('allEvents');
+            $expectation->andReturn($collection);
 
-            return $schedulerMock;
+            return $this->scheduler;
         });
         $this->exec('schedule:view');
 

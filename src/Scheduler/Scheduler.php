@@ -103,11 +103,11 @@ class Scheduler implements EventDispatcherInterface
         $command = new class ($callable, $args) extends Command {
             /**
              * @param callable $callable
-             * @param array $args
+             * @param array $callableArgs
              */
             public function __construct(
                 protected $callable,
-                protected array $args = [],
+                protected array $callableArgs = [],
             ) {
             }
 
@@ -118,9 +118,9 @@ class Scheduler implements EventDispatcherInterface
              */
             public function execute(Arguments $args, ConsoleIo $io): ?int
             {
-                array_push($this->args, $io);
+                array_push($this->callableArgs, $io);
 
-                return call_user_func_array($this->callable, $this->args);
+                return call_user_func_array($this->callable, $this->callableArgs);
             }
         };
         $event = new Event($command, $args);

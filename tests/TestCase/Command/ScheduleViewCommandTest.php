@@ -10,11 +10,14 @@ use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Event;
 use CakeScheduler\Scheduler\Scheduler;
 use Mockery;
+use Mockery\MockInterface;
 use TestApp\Command\TestAppCommand;
 
 class ScheduleViewCommandTest extends TestCase
 {
     use ConsoleIntegrationTestTrait;
+
+    protected Scheduler&MockInterface $scheduler;
 
     protected function setUp(): void
     {
@@ -25,6 +28,10 @@ class ScheduleViewCommandTest extends TestCase
             'TestApp\Application',
             [PLUGIN_TESTS . 'test_app' . DS . 'config'],
         );
+
+        /** @var \CakeScheduler\Scheduler\Scheduler&\Mockery\MockInterface $scheduler */
+        $scheduler = Mockery::mock(Scheduler::class, [new Container()])->makePartial();
+        $this->scheduler = $scheduler;
     }
 
     public function testRunScheduleView(): void
@@ -38,14 +45,15 @@ class ScheduleViewCommandTest extends TestCase
 
     public function testRunScheduleViewWithEventsHavingArgsAndOptions(): void
     {
-        $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
-        $scheduler = Mockery::mock(Scheduler::class, [new Container()])->makePartial();
-        /** @var \Mockery\Expectation $allEventsExpectation */
-        $allEventsExpectation = $scheduler->shouldReceive('allEvents');
-        $allEventsExpectation->andReturn(new Collection([$event]));
+        $this->mockService(Scheduler::class, function () {
+            $event = new Event(new TestAppCommand(), ['somearg', '--myoption=someoption']);
+            $collection = new Collection([$event]);
 
-        $this->mockService(Scheduler::class, function () use ($scheduler) {
-            return $scheduler;
+            /** @var \Mockery\ExpectationInterface $expectation */
+            $expectation = $this->scheduler->shouldReceive('allEvents');
+            $expectation->andReturn($collection);
+
+            return $this->scheduler;
         });
         $this->exec('schedule:view');
 
@@ -55,13 +63,14 @@ class ScheduleViewCommandTest extends TestCase
 
     public function testRunScheduleViewNoEvents(): void
     {
-        $scheduler = Mockery::mock(Scheduler::class, [new Container()])->makePartial();
-        /** @var \Mockery\Expectation $allEventsExpectation */
-        $allEventsExpectation = $scheduler->shouldReceive('allEvents');
-        $allEventsExpectation->andReturn(new Collection([]));
+        $this->mockService(Scheduler::class, function () {
+            $collection = new Collection([]);
 
-        $this->mockService(Scheduler::class, function () use ($scheduler) {
-            return $scheduler;
+            /** @var \Mockery\ExpectationInterface $expectation */
+            $expectation = $this->scheduler->shouldReceive('allEvents');
+            $expectation->andReturn($collection);
+
+            return $this->scheduler;
         });
         $this->exec('schedule:view');
 

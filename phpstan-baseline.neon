@@ -17,9 +17,3 @@ parameters:
 			identifier: method.notFound
 			count: 8
 			path: tests/TestCase/Command/ScheduleRunCommandTest.php
-
-		-
-			message: '#^Cannot unset property CakeScheduler\\Test\\TestCase\\Scheduler\\SchedulerTest\:\:\$scheduler because it might have hooks in a subclass\.$#'
-			identifier: unset.possiblyHookedProperty
-			count: 1
-			path: tests/TestCase/Scheduler/SchedulerTest.php

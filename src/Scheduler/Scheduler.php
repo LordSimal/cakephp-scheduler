@@ -134,9 +134,15 @@ class Scheduler implements EventDispatcherInterface
      */
     public function dueEvents(): CollectionInterface
     {
-        return $this->events->filter(function (Event $event) {
-            return $event->isDue();
-        });
+        return $this->events
+            ->filter(function (Event $event) {
+                return $event->isDue();
+            })
+            ->sortBy(
+                fn(Event $event): int => $event->getPriority(),
+                SORT_DESC,
+                SORT_NUMERIC,
+            );
     }
 
     /**

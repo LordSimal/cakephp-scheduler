@@ -15,6 +15,11 @@ class Event
 
     protected ConsoleIo $io;
 
+    /**
+     * The execution priority of this event.
+     */
+    protected int $priority = 0;
+
     public const SUNDAY = 0;
     public const MONDAY = 1;
     public const TUESDAY = 2;
@@ -74,5 +79,32 @@ class Event
     public function getArgs(): array
     {
         return $this->args;
+    }
+
+    /**
+     * Set the event execution priority.
+     *
+     * Events with a higher priority are run before lower-priority events that
+     * are due at the same time. Events with the same priority retain the order
+     * in which they were scheduled.
+     *
+     * @param int $priority The event execution priority
+     * @return $this
+     */
+    public function priority(int $priority)
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * Get the event execution priority.
+     *
+     * @return int
+     */
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 }

@@ -47,6 +47,17 @@ class SchedulerTest extends TestCase
         Chronos::setTestNow('now');
     }
 
+    public function testDueEventsAreOrderedByPriority(): void
+    {
+        $firstEvent = $this->scheduler->execute(VersionCommand::class);
+        $secondEvent = $this->scheduler->execute(HelpCommand::class)->priority(10);
+        $thirdEvent = $this->scheduler->execute(VersionCommand::class)->priority(10);
+
+        $events = array_values($this->scheduler->dueEvents()->toArray());
+
+        $this->assertSame([$secondEvent, $thirdEvent, $firstEvent], $events);
+    }
+
     public function testAddCallable(): void
     {
         $this->scheduler->execute(function ($a, $b, $c, ConsoleIo $io) {

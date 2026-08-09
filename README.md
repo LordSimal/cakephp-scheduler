@@ -10,7 +10,7 @@ to being app controlled in your CakePHP application (and plugins).
 
 ## Requirements
 - PHP 8.1+
-- CakePHP 5.0+
+- CakePHP 5.0–5.3
 
 ## Installation
 ```
@@ -66,6 +66,17 @@ with the `->execute()` method you define which Command should be executed.
 
 Each `->execute()` method will return a `\CakeScheduler\Scheduler\Event` instance which 
 is used to tell the scheduler when the command should be executed.
+
+### Command priority
+
+When multiple commands are due at the same time, they run in the order they
+were scheduled. You can override that order with `->priority()`: higher values
+run first, while commands with the same priority keep their scheduled order.
+
+```php
+$scheduler->execute(GenerateReportCommand::class)->dailyAt('02:00')->priority(10);
+$scheduler->execute(SendReportCommand::class)->dailyAt('02:00')->priority(5);
+```
 
 ### Available frequencies
 

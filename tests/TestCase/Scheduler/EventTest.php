@@ -32,6 +32,13 @@ class EventTest extends TestCase
         $this->assertSame('* * * * *', $this->event->everyMinute()->getExpression());
     }
 
+    public function testPriority(): void
+    {
+        $this->assertSame(0, $this->event->getPriority());
+        $this->assertSame($this->event, $this->event->priority(10));
+        $this->assertSame(10, $this->event->getPriority());
+    }
+
     public function testEveryXMinutes(): void
     {
         $this->assertSame('*/2 * * * *', $this->event->everyXMinutes(2)->getExpression());

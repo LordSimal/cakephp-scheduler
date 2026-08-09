@@ -10,7 +10,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "cakephp/cakephp": "^5.4@RC",
+        "cakephp/cakephp": "^5.4",
         "dragonmantank/cron-expression": "^3.3"
     },
     "require-dev": {

@@ -5,12 +5,16 @@
 
 ## What can this plugin do?
 
-This tool allows you to move all your cron jobs from being server configured via `crontab` 
+This tool allows you to move all your cron jobs from being server configured via `crontab`
 to being app controlled in your CakePHP application (and plugins).
 
 ## Requirements
-- PHP 8.1+
-- CakePHP 5.0–5.3
+
+| Plugin version | Supported PHP versions | Supported CakePHP versions |
+|----------------|------------------------|----------------------------|
+| 0.x            | 7.4+ / 8.0+            | 4.4+                       |
+| 1.x            | 8.1+                   | 5.0–5.3                    |
+| 2.x            | 8.2+                   | 5.4+                       |
 
 ## Installation
 ```
@@ -43,7 +47,7 @@ which will add the `schedule(Scheduler &$scheduler)` method.
 
 ```php
 <?php
- 
+
 namespace App;
 
 use App\Command\MyAppCommand;
@@ -64,7 +68,7 @@ class Application extends BaseApplication implements CakeSchedulerInterface
 
 with the `->execute()` method you define which Command should be executed.
 
-Each `->execute()` method will return a `\CakeScheduler\Scheduler\Event` instance which 
+Each `->execute()` method will return a `\CakeScheduler\Scheduler\Event` instance which
 is used to tell the scheduler when the command should be executed.
 
 ### Command priority
@@ -114,7 +118,7 @@ $scheduler->execute(SendReportCommand::class)->dailyAt('02:00')->priority(5);
 | `->yearly();`                               | on the first day of the year at midnight    |
 | `->yearlyOn(4, '5', '15:00');`              | on the 5th of april at 15:00 every year     |
 
-Also see the [EventTest](https://github.com/LordSimal/cakephp-scheduler/blob/main/tests/TestCase/Scheduler/EventTest.php) 
+Also see the [EventTest](https://github.com/LordSimal/cakephp-scheduler/blob/main/tests/TestCase/Scheduler/EventTest.php)
 for all the available options
 
 ### List all scheduled events

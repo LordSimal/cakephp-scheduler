@@ -5,7 +5,7 @@ namespace CakeScheduler\Test\TestCase\Command;
 
 use Cake\Collection\Collection;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
-use Cake\Core\Container;
+use Cake\Container\Container;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Event;
 use CakeScheduler\Scheduler\Scheduler;

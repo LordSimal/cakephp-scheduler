@@ -11,9 +11,3 @@ parameters:
 			identifier: method.notFound
 			count: 8
 			path: tests/TestCase/Command/ScheduleRunCommandTest.php
-
-		-
-			message: '#^Call to an undefined method Mockery\\ExpectationInterface\|Mockery\\HigherOrderMessage\:\:andReturn\(\)\.$#'
-			identifier: method.notFound
-			count: 8
-			path: tests/TestCase/Command/ScheduleRunCommandTest.php

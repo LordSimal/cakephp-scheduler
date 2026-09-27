@@ -7,7 +7,7 @@ use Cake\Chronos\Chronos;
 use Cake\Command\VersionCommand;
 use Cake\Console\Command\HelpCommand;
 use Cake\Console\ConsoleIo;
-use Cake\Core\Container;
+use Cake\Container\Container;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Scheduler\Scheduler;
 use InvalidArgumentException;

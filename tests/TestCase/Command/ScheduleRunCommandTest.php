@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace CakeScheduler\Test\TestCase\Command;
 
 use Cake\Collection\Collection;
-use Cake\Console\Arguments;
 use Cake\Console\ConsoleIo;
 use Cake\Console\TestSuite\ConsoleIntegrationTestTrait;
-use Cake\Core\Container;
+use Cake\Container\Container;
 use Cake\Event\EventInterface;
 use Cake\TestSuite\TestCase;
 use CakeScheduler\Error\SchedulerStoppedException;
@@ -108,7 +107,7 @@ class ScheduleRunCommandTest extends TestCase
     public function testRunSingleCommandWhichThrowsException(): void
     {
         $command = new class () extends TestAppCommand {
-            public function execute(Arguments $args, ConsoleIo $io): void
+            public function execute(): void
             {
                 throw new Exception('Test Exception');
             }
@@ -130,7 +129,7 @@ class ScheduleRunCommandTest extends TestCase
     public function testRunSingleCommandWhichThrowsExceptionAndListenerStopsExecution(): void
     {
         $command = new class () extends TestAppCommand {
-            public function execute(Arguments $args, ConsoleIo $io): void
+            public function execute(): void
             {
                 throw new Exception('Test Exception');
             }
@@ -156,7 +155,7 @@ class ScheduleRunCommandTest extends TestCase
         $appEvent = new Event(new TestAppCommand(), []);
         $pluginEvent = new Event(new TestPluginCommand(), []);
         $failCommand = new class () extends TestAppCommand {
-            public function execute(Arguments $args, ConsoleIo $io): void
+            public function execute(): void
             {
                 throw new Exception('Test Exception');
             }
@@ -184,7 +183,7 @@ class ScheduleRunCommandTest extends TestCase
         $appEvent = new Event(new TestAppCommand(), []);
         $pluginEvent = new Event(new TestPluginCommand(), []);
         $failCommand = new class () extends TestAppCommand {
-            public function execute(Arguments $args, ConsoleIo $io): void
+            public function execute(): void
             {
                 throw new Exception('Test Exception');
             }

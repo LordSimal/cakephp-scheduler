@@ -9,8 +9,8 @@ use Cake\Console\ConsoleIo;
 
 class TestPluginCommand extends Command
 {
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute()
     {
-        $io->info('Test Plugin Command executed');
+        $this->io->info('Test Plugin Command executed');
     }
 }

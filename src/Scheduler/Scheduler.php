@@ -6,11 +6,8 @@ namespace CakeScheduler\Scheduler;
 use Cake\Collection\Collection;
 use Cake\Collection\CollectionInterface;
 use Cake\Command\Command;
-use Cake\Console\Arguments;
 use Cake\Console\CommandInterface;
-use Cake\Console\ConsoleIo;
-use Cake\Core\Container;
-use Cake\Core\ContainerInterface;
+use Cake\Container\ContainerInterface;
 use Cake\Event\EventDispatcherInterface;
 use Cake\Event\EventDispatcherTrait;
 use InvalidArgumentException;
@@ -36,9 +33,9 @@ class Scheduler implements EventDispatcherInterface
     public const SHOULD_STOP_EXECUTION = 1;
 
     /**
-     * @param \Cake\Core\Container|null $container The DI container instance from the app
+     * @param \Cake\Container\ContainerInterface|null $container The DI container instance from the app
      */
-    public function __construct(?Container $container = null)
+    public function __construct(?ContainerInterface $container = null)
     {
         $this->container = $container;
         $this->events = new Collection([]);
@@ -106,13 +103,11 @@ class Scheduler implements EventDispatcherInterface
             }
 
             /**
-             * @param \Cake\Console\Arguments $args
-             * @param \Cake\Console\ConsoleIo $io
              * @return int|null
              */
-            public function execute(Arguments $args, ConsoleIo $io): ?int
+            public function execute(): ?int
             {
-                array_push($this->callableArgs, $io);
+                array_push($this->callableArgs, $this->io);
 
                 return call_user_func_array($this->callable, $this->callableArgs);
             }

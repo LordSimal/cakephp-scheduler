@@ -6,6 +6,7 @@ namespace CakeScheduler\Scheduler;
 use Cake\Chronos\Chronos;
 use Cake\Console\CommandInterface;
 use Cake\Console\ConsoleIo;
+use Cake\Console\ConsoleIoInterface;
 use CakeScheduler\Scheduler\Traits\FrequenciesTrait;
 use Cron\CronExpression;
 
@@ -47,10 +48,10 @@ class Event
     }
 
     /**
-     * @param \Cake\Console\ConsoleIo $io The IO instance from the schedule:run command
+     * @param \Cake\Console\ConsoleIoInterface $io The IO instance from the schedule:run command
      * @return int|null
      */
-    public function run(ConsoleIo $io): ?int
+    public function run(ConsoleIoInterface $io): ?int
     {
         $io->info(sprintf('Executing [%s]', get_class($this->command)));
 
@@ -91,7 +92,7 @@ class Event
      * @param int $priority The event execution priority
      * @return $this
      */
-    public function priority(int $priority)
+    public function priority(int $priority): static
     {
         $this->priority = $priority;
 

@@ -21,16 +21,16 @@ class TestAppCommand extends Command
         return $parser;
     }
 
-    public function execute(Arguments $args, ConsoleIo $io)
+    public function execute()
     {
-        $io->info('Test App Command executed');
-        $arg = $args->getArgument('myarg');
+        $this->io->info('Test App Command executed');
+        $arg = $this->args->getArgument('myarg');
         if ($arg) {
-            $io->info('with arg ' . $arg);
+            $this->io->info('with arg ' . $arg);
         }
-        $option = $args->getOption('myoption');
+        $option = $this->args->getOption('myoption');
         if ($option) {
-            $io->info('with option ' . $option);
+            $this->io->info('with option ' . $option);
         }
     }
 }

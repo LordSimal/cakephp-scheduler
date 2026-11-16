@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ '8.4', '8.5' ]
+        php-version: [ '8.4', '8.5', '8.6' ]
         dependencies: ['highest']
         include:
           - php-version: '8.4'
@@ -33,7 +33,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
           extensions: mbstring, intl
           ini-values: zend.assertions=1
-          coverage: pcov
+          coverage: ${{ matrix.php-version == '8.4' && 'pcov' || 'none' }}
           tools: cs2pr
 
       - name: Composer install
@@ -85,6 +85,6 @@ jobs:
 
       - name: Run phpstan
         if: always()
-        uses: docker://ghcr.io/danog/psalm:7.0.0-beta19
+        uses: docker://ghcr.io/danog/psalm:7
         with:
             args: /composer/vendor/bin/psalm --no-cache --output-format=github
